@@ -1,8 +1,11 @@
 package com.batch.demo;
 
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
@@ -50,6 +53,17 @@ public class BatchConfiguration {
                 .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
                 .sql("INSERT INTO people (first_name, last_name) VALUES (:firstName, :lastName)")
                 .dataSource(dataSource)
+                .build();
+    }
+
+    @Bean
+    public Job importUserJob(JobCompletionNotificationListener listener, Step step1) {
+        return jobBuilderFactory
+                .get("importUserJob")
+                .incrementer(new RunIdIncrementer())
+                .listener(listener)
+                .flow(step1)
+                .end()
                 .build();
     }
 
