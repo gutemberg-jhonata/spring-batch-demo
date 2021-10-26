@@ -67,4 +67,14 @@ public class BatchConfiguration {
                 .build();
     }
 
+    @Bean
+    public Step step1(JdbcBatchItemWriter<Person> writer) {
+        return stepBuilderFactory
+                .get("step1")
+                .<Person, Person> chunk(10)
+                .processor(processor())
+                .writer(writer)
+                .build();
+    }
+
 }
