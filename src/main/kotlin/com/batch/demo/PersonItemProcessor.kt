@@ -8,7 +8,7 @@ class PersonItemProcessor : ItemProcessor<Person, Person> {
 
     private val log: Logger = LoggerFactory.getLogger(PersonItemProcessor::class.java)
 
-    override fun process(person: Person): Person? {
+    override fun process(person: Person): Person {
         val firstName = person.firstName.uppercase()
         val lastName = person.lastName.uppercase()
 
