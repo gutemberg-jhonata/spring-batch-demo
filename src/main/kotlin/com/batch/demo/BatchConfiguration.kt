@@ -53,24 +53,24 @@ class BatchConfiguration(
     }
 
     @Bean
-    fun importUserJob(listener: JobCompletionNotificationListener?, step1: Step?): Job? {
+    fun importUserJob(listener: JobCompletionNotificationListener, step1: Step): Job {
         return jobBuilderFactory
                 .get("importUserJob")
                 .incrementer(RunIdIncrementer())
-                .listener(listener!!)
-                .flow(step1!!)
+                .listener(listener)
+                .flow(step1)
                 .end()
                 .build()
     }
 
     @Bean
-    fun step1(writer: JdbcBatchItemWriter<Person>?): Step? {
+    fun step1(writer: JdbcBatchItemWriter<Person>): Step {
         return stepBuilderFactory
                 .get("step1")
                 .chunk<Person, Person>(10)
                 .reader(reader())
                 .processor(processor())
-                .writer(writer!!)
+                .writer(writer)
                 .build()
     }
 
